@@ -236,13 +236,9 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 		for true {
 			var tempArrowHead Point
 			if arrowHead.x > p2.x {
-				if arrowHead.y > p2.y {
-					tempArrowHead = Point{arrowHead.x, arrowHead.y - 1}
-				} else {
-					tempArrowHead = Point{arrowHead.x, arrowHead.y + 1}
-				}
+				tempArrowHead = Point{arrowHead.x - 1,arrowHead.y}
 			} else {
-				tempArrowHead = Point{arrowHead.x,arrowHead.y + 1}
+				tempArrowHead = Point{arrowHead.x + 1,arrowHead.y}
 			}
 			if !tempArrowHead.isInsideRect(cB) {
 				arrowHead = tempArrowHead
@@ -251,12 +247,26 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 			}
 		}
 		var pointL, pointR Point
-		if arrowHead.y > p2.y {
-			pointL = Point{arrowHead.x - 1, arrowHead.y + .5}
-			pointR = Point{arrowHead.x + 1, arrowHead.y + .5}
+		if p2.x > p1.x {
+			log.Println("a")
+			pointL = Point{
+				arrowHead.x + math.Sin(2*math.Pi/3),
+				arrowHead.y - math.Cos(2*math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x - math.Sin(math.Pi/3),
+				arrowHead.y + math.Cos(math.Pi/3),
+			}
 		} else {
-			pointL = Point{arrowHead.x - 1, arrowHead.y - .5}
-			pointR = Point{arrowHead.x + 1, arrowHead.y - .5}
+			log.Println("b")
+			pointL = Point{
+				arrowHead.x + math.Sin(2*math.Pi/3),
+				arrowHead.y - math.Cos(math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x + math.Sin(math.Pi/3),
+				arrowHead.y + math.Cos(math.Pi/3),
+			}
 		}
 		if _, err := canvas.Write([]byte(fmt.Sprintf("\t<line x1=\"%fem\" y1=\"%fem\" x2=\"%fem\" y2=\"%fem\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />\n", pointL.x, pointL.y, arrowHead.x, arrowHead.y))); err != nil {
 			log.Panic(err)
@@ -267,7 +277,7 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 		return
 	}
 	arrowHead := Point{(p1.x + p2.x) / 2, (p1.y + p2.y) / 2}
-	slope := float64(p2.y-p1.y)/float64(p2.x-p1.x)
+	slope := (p2.y-p1.y)/(p2.x-p1.x)
 	for true {
 		var tempArrowHead Point
 		if arrowHead.x > p2.x {
@@ -282,17 +292,46 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 		}
 	}
 	var pointL, pointR Point
-	if arrowHead.x > p2.x {
-		if arrowHead.y > p2.y {
-			pointL = Point{arrowHead.x, arrowHead.y + slope * 2}
-			pointR = Point{arrowHead.x + 1/slope, arrowHead.y}
+	if p2.y - p1.y < 0 {
+		if p2.x - p1.x < 0 {
+			pointL = Point{
+				arrowHead.x + math.Sin(math.Atan(slope)+math.Pi/3),
+				arrowHead.y - math.Cos(math.Atan(slope)+math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x - math.Sin(math.Atan(slope)-math.Pi/3),
+				arrowHead.y + math.Cos(math.Atan(slope)-math.Pi/3),
+			}
 		} else {
-			pointL = Point{arrowHead.x, arrowHead.y + slope * 2}
-			pointR = Point{arrowHead.x - 1/slope, arrowHead.y}
+			pointL = Point{
+				arrowHead.x + math.Sin(math.Atan(slope)-math.Pi/3),
+				arrowHead.y - math.Cos(math.Atan(slope)-math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x - math.Sin(math.Atan(slope)+math.Pi/3),
+				arrowHead.y + math.Cos(math.Atan(slope)+math.Pi/3),
+			}
 		}
 	} else {
-		pointL = Point{arrowHead.x, arrowHead.y - slope * 2}
-		pointR = Point{arrowHead.x + 1/slope, arrowHead.y}
+		if p2.x - p1.x < 0 {
+			pointL = Point{
+				arrowHead.x + math.Sin(math.Atan(slope)+math.Pi/3),
+				arrowHead.y - math.Cos(math.Atan(slope)+math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x - math.Sin(math.Atan(slope)-math.Pi/3),
+				arrowHead.y + math.Cos(math.Atan(slope)-math.Pi/3),
+			}
+		} else {
+			pointL = Point{
+				arrowHead.x + math.Sin(math.Atan(slope)-math.Pi/3),
+				arrowHead.y - math.Cos(math.Atan(slope)-math.Pi/3),
+			}
+			pointR = Point{
+				arrowHead.x - math.Sin(math.Atan(slope)+math.Pi/3),
+				arrowHead.y - math.Cos(math.Atan(slope)+math.Pi/3),
+			}
+		}
 	}
 	if _, err := canvas.Write([]byte(fmt.Sprintf("\t<line x1=\"%fem\" y1=\"%fem\" x2=\"%fem\" y2=\"%fem\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />\n", pointL.x, pointL.y, arrowHead.x, arrowHead.y))); err != nil {
 		log.Panic(err)
@@ -331,13 +370,18 @@ func Generate(canvas io.Writer, diagram Diagram) {
 			topLeft := Point{float64(rand.Intn(width-classWidths[c]-2) + 1), float64(rand.Intn(height-classHeights[c]-2) + 1)}
 			botRight := Point{topLeft.x + float64(classWidths[c]), topLeft.y + float64(classHeights[c])}
 			classSpaces = append(classSpaces, ClassSpace{topLeft, botRight})
+			log.Println(len(classSpaces))
 			cont := true
 			for index := 0; index < c && cont; index++ {
+				log.Printf("c: %d, index: %d", c, index)
 				if (classSpaces[c].topLeft.x < classSpaces[index].botRight.x+1 && classSpaces[c].topLeft.x > classSpaces[index].topLeft.x-1 && ((classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1 && classSpaces[c].topLeft.y > classSpaces[index].topLeft.y-1) || (classSpaces[c].botRight.y > classSpaces[index].topLeft.y-1 && classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1))) || (classSpaces[c].botRight.x > classSpaces[index].topLeft.x && classSpaces[c].topLeft.x < classSpaces[index].botRight.x+1 && ((classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1 && classSpaces[c].topLeft.y > classSpaces[index].topLeft.y-1) || (classSpaces[c].botRight.y > classSpaces[index].topLeft.y-1 && classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1))) {
 					classSpaces = []ClassSpace{}
 					cont = false
 					satisfied = false
 				}
+			}
+			if cont == false {
+				break
 			}
 		}
 		if satisfied {
