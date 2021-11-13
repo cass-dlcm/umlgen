@@ -1,0 +1,143 @@
+{
+  "Seed": 1,
+  "Classes": [
+    {
+    "Name": "Student",
+    "Attributes": [
+      {
+        "Visibility": "private",
+        "Name": "name",
+        "Type": "string"
+      },
+      {
+        "Visibility": "private",
+        "Name": "grade",
+        "Type": "Grade[]"
+      },
+      {
+        "Visibility": "private",
+        "Name": "section",
+        "Type": "int"
+      }
+    ],
+    "Methods": [
+      {
+        "Visibilty": "public",
+        "Name": "Student",
+        "Args": [
+          {
+            "Name": "name",
+            "Type": "string"
+          },
+          {
+            "Name": "section",
+            "Type": "int"
+          }
+        ],
+        "Return": "Student"
+      },
+      {
+        "Visibilty": "public",
+        "Name": "getName",
+        "Return": "string"
+      },
+      {
+        "Visibilty": "protected",
+        "Name": "getSection",
+        "Return": "int"
+      },
+      {
+        "Visibilty": "protected",
+        "Name": "setSection",
+        "Return": "bool",
+        "Args": [
+          {
+            "Name": "section",
+            "Type": "int"
+          }
+        ]
+      },
+      {
+        "Visibilty": "protected",
+        "Name": "addGrade",
+        "Args": [
+          {
+            "Name": "grade",
+            "Type": "Grade"
+          }
+        ],
+        "Return": "bool"
+      }
+    ]
+  },
+    {
+      "Name": "Student",
+      "Attributes": [
+        {
+          "Visibility": "private",
+          "Name": "name",
+          "Type": "string"
+        },
+        {
+          "Visibility": "private",
+          "Name": "grade",
+          "Type": "Grade[]"
+        },
+        {
+          "Visibility": "private",
+          "Name": "section",
+          "Type": "int"
+        }
+      ],
+      "Methods": [
+        {
+          "Visibilty": "public",
+          "Name": "Student",
+          "Args": [
+            {
+              "Name": "name",
+              "Type": "string"
+            },
+            {
+              "Name": "section",
+              "Type": "int"
+            }
+          ],
+          "Return": "Student"
+        },
+        {
+          "Visibilty": "public",
+          "Name": "getName",
+          "Return": "string"
+        },
+        {
+          "Visibilty": "protected",
+          "Name": "getSection",
+          "Return": "int"
+        },
+        {
+          "Visibilty": "protected",
+          "Name": "setSection",
+          "Return": "bool",
+          "Args": [
+            {
+              "Name": "section",
+              "Type": "int"
+            }
+          ]
+        },
+        {
+          "Visibilty": "protected",
+          "Name": "addGrade",
+          "Args": [
+            {
+              "Name": "grade",
+              "Type": "Grade"
+            }
+          ],
+          "Return": "bool"
+        }
+      ]
+    }
+  ]
+}
