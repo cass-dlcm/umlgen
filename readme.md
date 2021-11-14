@@ -2,6 +2,8 @@
 
 A tool for generating UML Class Diagrams from JSON textual representations.
 
+Created during Knight Hacks 2021.
+
 ## Installation
 
 ```shell
