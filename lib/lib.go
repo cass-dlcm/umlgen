@@ -248,7 +248,6 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 		}
 		var pointL, pointR Point
 		if p2.x > p1.x {
-			log.Println("a")
 			pointL = Point{
 				arrowHead.x + math.Sin(2*math.Pi/3),
 				arrowHead.y - math.Cos(2*math.Pi/3),
@@ -258,7 +257,6 @@ func AddInteraction(canvas io.Writer, cA, cB ClassSpace) {
 				arrowHead.y + math.Cos(math.Pi/3),
 			}
 		} else {
-			log.Println("b")
 			pointL = Point{
 				arrowHead.x + math.Sin(2*math.Pi/3),
 				arrowHead.y - math.Cos(math.Pi/3),
@@ -370,10 +368,8 @@ func Generate(canvas io.Writer, diagram Diagram) {
 			topLeft := Point{float64(rand.Intn(width-classWidths[c]-2) + 1), float64(rand.Intn(height-classHeights[c]-2) + 1)}
 			botRight := Point{topLeft.x + float64(classWidths[c]), topLeft.y + float64(classHeights[c])}
 			classSpaces = append(classSpaces, ClassSpace{topLeft, botRight})
-			log.Println(len(classSpaces))
 			cont := true
 			for index := 0; index < c && cont; index++ {
-				log.Printf("c: %d, index: %d", c, index)
 				if (classSpaces[c].topLeft.x < classSpaces[index].botRight.x+1 && classSpaces[c].topLeft.x > classSpaces[index].topLeft.x-1 && ((classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1 && classSpaces[c].topLeft.y > classSpaces[index].topLeft.y-1) || (classSpaces[c].botRight.y > classSpaces[index].topLeft.y-1 && classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1))) || (classSpaces[c].botRight.x > classSpaces[index].topLeft.x && classSpaces[c].topLeft.x < classSpaces[index].botRight.x+1 && ((classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1 && classSpaces[c].topLeft.y > classSpaces[index].topLeft.y-1) || (classSpaces[c].botRight.y > classSpaces[index].topLeft.y-1 && classSpaces[c].topLeft.y < classSpaces[index].botRight.y+1))) {
 					classSpaces = []ClassSpace{}
 					cont = false
